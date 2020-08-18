@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: vault-demo
+  name: vault-demo
+  namespace: vault-demo
+spec:
+  rules:
+  - host: vault-demo.apps-crc.testing
+    http:
+      paths:
+      - backend:
+          serviceName: vault-demo
+          servicePort: 8080
+        path: "/"
+    

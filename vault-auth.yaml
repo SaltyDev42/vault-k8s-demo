@@ -1,0 +1,17 @@
+apiVersion: v1
+imagePullSecrets:
+- name: vault-auth-dockercfg-l7fzj
+kind: ServiceAccount
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"name":"vault-auth","namespace":"vault"}}
+  creationTimestamp: "2020-08-15T21:09:50Z"
+  name: vault-auth
+  namespace: vault
+  resourceVersion: "434652"
+  selfLink: /api/v1/namespaces/vault/serviceaccounts/vault-auth
+  uid: 23a8a208-435e-45b4-832f-8178af97f4fe
+secrets:
+- name: vault-auth-token-4clj9
+- name: vault-auth-dockercfg-l7fzj

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vault-demo
+  name: vault-demo
+  namespace: vault-demo
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: vault-demo
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: vault-demo
+      annotations:
+        vault.hashicorp.com/role: "secret-consumer"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/tls-secret: ca
+        vault.hashicorp.com/ca-cert: "/vault/tls/ca.crt.pem"
+        vault.hashicorp.com/secret-volume-path-vault.html: "/var/www/localhost/htdocs/"
+        vault.hashicorp.com/agent-inject-secret-vault.html: "vault/credentials"
+        vault.hashicorp.com/agent-inject-template-vault.html: |
+          <html>
+          <body>
+          <h1>Bienvenue sur la demo Vault secret avec Openshift</h1>
+          <p>Voici les secrets provenant de vault (vault/credentials) :</p>
+          {{- with secret "vault/credentials" -}}
+          <ul>
+          <li><pre>username: {{ .Data.username }}</pre></li>
+          <li><pre>password: {{ .Data.password }}</pre></li>
+          </ul>
+          {{- end }}
+          </body>
+          </html>
+    spec:
+      containers:
+      - image: registry.gitlab.com/saltydev42/docker-images/httpd:latest
+        imagePullPolicy: Always
+        name: httpd
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      serviceAccount: secret-consumer
+      serviceAccountName: secret-consumer
+
