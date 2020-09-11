@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: flask-app
+  name: flask-app
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: flask-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: flask-app
+      annotations:
+        vault.hashicorp.com/role: "flask-app"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/secret-volume-path: "/app/config"
+        vault.hashicorp.com/agent-inject-secret-db.uri: "database/creds/flask-app"
+        vault.hashicorp.com/agent-inject-template-db.uri: |
+          {{- with secret "database/creds/flask-app" -}}
+          postgresql+psycopg2://{{ .Data.username }}:{{ .Data.password }}@postgres.flask-app.svc.cluster.local:5432/vault-flask-app?sslmode=disable
+          {{- end }}
+    spec:
+      containers:
+      - image: registry.gitlab.com/saltydev42/docker-images/flask-app:latest
+        imagePullPolicy: Always
+        name: flask-app
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        env:
+          - name: VAULT_ADDR
+            value: "http://vault.vault.svc.cluster.local:8200"
+        ports:
+          - containerPort: 5000
+            name: flask
+            protocol: TCP
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      serviceAccount: flask-app
+      serviceAccountName: flask-app

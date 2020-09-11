@@ -4,7 +4,6 @@ metadata:
   labels:
     app: vault-demo
   name: vault-demo
-  namespace: vault-demo
 spec:
   rules:
   - host: vault-demo.apps-crc.testing

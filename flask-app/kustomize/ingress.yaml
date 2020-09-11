@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: flask-app
+  name: flask-app
+spec:
+  rules:
+  - host: flask-app.apps-crc.testing
+    http:
+      paths:
+      - backend:
+          serviceName: flask-app
+          servicePort: 5000
+        path: "/"

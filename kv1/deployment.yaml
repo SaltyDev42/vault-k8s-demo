@@ -4,7 +4,6 @@ metadata:
   labels:
     app: vault-demo
   name: vault-demo
-  namespace: vault-demo
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -26,7 +25,7 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/tls-secret: ca
         vault.hashicorp.com/ca-cert: "/vault/tls/ca.crt.pem"
-        vault.hashicorp.com/secret-volume-path-vault.html: "/var/www/localhost/htdocs/"
+        vault.hashicorp.com/secret-volume-path-vault.html: "/var/www/localhost/htdocs"
         vault.hashicorp.com/agent-inject-secret-vault.html: "vault/credentials"
         vault.hashicorp.com/agent-inject-template-vault.html: |
           <html>
@@ -60,4 +59,3 @@ spec:
       terminationGracePeriodSeconds: 30
       serviceAccount: secret-consumer
       serviceAccountName: secret-consumer
-

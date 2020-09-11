@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Encoded CC</th>
+    <th>Tweak Value</th>
+  </tr>
+  {% for cc in ccs %}
+  <tr>
+    <td>{{ cc._id }}</td>
+    <td>{{ cc.cc }}</td>
+    <td>{{ cc.tweak }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

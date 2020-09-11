@@ -3,7 +3,7 @@
 ## install vault-k8s injector into OC
 helm repo add hashicorp https://helm.releases.hashicorp.com
 ## TODO >> template values.yaml
-helm install hashicorp/vault --namespace vault --create-namespace -f values.yaml
+helm install vault hashicorp/vault --namespace vault --create-namespace -f values.yaml
 
 ## KV1 setup
 vault secrets enable kv --path=vault --version=1
