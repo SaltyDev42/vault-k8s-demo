@@ -6,12 +6,18 @@ resources:
 - service.yaml
 - ingress.yaml
 - service-account.yaml
+- jobs.yaml
+# secretGenerator:
+# - name: ca
+#   files:
+#   - ca.crt.pem
+#   type: Opaque
 
-secretGenerator:
-- name: ca
+configMapGenerator:
+- name: vault-kv1-setup
   files:
-  - ca.crt.pem
-  type: Opaque
+  - secret-consumer.hcl
+  - vault-k8s-demo-kv1.sh
 
-generatorOptions:
-  disableNameSuffixHash: true
+# generatorOptions:
+#   disableNameSuffixHash: true

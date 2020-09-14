@@ -29,12 +29,12 @@ injector:
 
   # External vault server address for the injector to use. Setting this will
   # disable deployment of a vault server along with the injector.
-  externalVaultAddr: "https://192.168.130.75:8200"
+  externalVaultAddr: ""
 
   # image sets the repo and tag of the vault-k8s image to use for the injector.
   image:
     repository: "hashicorp/vault-k8s"
-    tag: "0.4.0"
+    tag: "0.5.0"
     pullPolicy: IfNotPresent
 
   # agentImage sets the repo and tag of the Vault image to use for the Vault Agent
@@ -42,7 +42,7 @@ injector:
   # required.
   agentImage:
     repository: "vault"
-    tag: "1.4.2"
+    tag: "latest"
 
   # Mount Path of the Vault Kubernetes Auth Method.
   authPath: "auth/kubernetes"
@@ -124,8 +124,8 @@ server:
   # By default no direct resource request is made.
 
   image:
-    repository: "vault"
-    tag: "1.4.2"
+    repository: "hashicorp/vault-enterprise"
+    tag: "latest"
     # Overrides the default Image Pull Policy
     pullPolicy: IfNotPresent
 
@@ -373,7 +373,7 @@ server:
   # use dev mode for anything other than experimenting.
   # See https://www.vaultproject.io/docs/concepts/dev-server.html to know more
   dev:
-    enabled: false
+    enabled: true
 
   # Run Vault in "standalone" mode. This is the default mode that will deploy if
   # no arguments are given to helm. This requires a PVC for data storage to use

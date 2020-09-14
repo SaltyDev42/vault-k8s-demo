@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-setup
+spec:
+  completion: 1
+  template:
+    metadata:
+      name: vault-setup-kv1
+    spec:
+      containers:
+      - name: vault
+        image: vault:latest
+        command:
+        - "sh"
+        - "/vault/setup/vault-k8s-demo-kv1.sh"
+        volumeMounts:
+        - name: setup
+          readOnly: yes
+          mountPath: "/vault/setup"
+      volumes:
+      - configMap:
+          name: vault-kv1-setup
+        name: setup
+      restartPolicy: Never

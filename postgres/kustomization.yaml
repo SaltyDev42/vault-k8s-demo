@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+commonLabels:
+  apps: postgres
+
+resources:
+- scc.yaml
+- service-account.yaml
+- deployment.yaml
+- service.yaml
+- jobs.yaml
+
+configMapGenerator:
+- name: vault-db-setup
+  files:
+  - vault-k8s-demo-db.sh
+  - statement.sql
+  - revocation.sql
+- name: db-setup
+  files:
+  - postgres-setup.sh
+  
+
+secretGenerator:
+- name: pg-secret
+  literals:
+  - "pg-passwd=vault123!"
+  - "pg-user=vault"
+  - "pg-dbname=vault-flask-app"
+  - "pg-root-pw=postgres123!"
+  type: Opaque
+
+# generatorOptions:
+#   disableNameSuffixHash: true

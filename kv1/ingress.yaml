@@ -6,7 +6,7 @@ metadata:
   name: vault-demo
 spec:
   rules:
-  - host: vault-demo.apps-crc.testing
+  - host: vault-demo
     http:
       paths:
       - backend:

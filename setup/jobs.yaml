@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-setup
+spec:
+  completion: 1
+  template:
+    metadata:
+      name: vault-setup
+    spec:
+      containers:
+      - name: vault
+        image: vault:latest
+        command:
+        - "sh"
+        - "/vault/setup/vault-k8s-demo-setup.sh"
+        volumeMounts:
+        - name: setup
+          readOnly: yes
+          mountPath: "/vault/setup"
+        - name: hclic
+          readOnly: yes
+          mountPath: "/vault/hclic"
+      volumes:
+      - configMap:
+          name: vault-setup
+        name: setup
+      - secret:
+          secretName: vault-hclic
+        name: hclic
+      serviceAccountName: vault-auth
+      restartPolicy: Never

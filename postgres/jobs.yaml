@@ -1,0 +1,53 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-setup
+spec:
+  completion: 1
+  template:
+    metadata:
+      name: vault-setup-kv1
+    spec:
+      containers:
+      - name: vault
+        image: vault:latest
+        command:
+        - "sh"
+        - "/vault/setup/vault-k8s-demo-db.sh"
+        volumeMounts:
+        - name: vault-setup
+          readOnly: yes
+          mountPath: "/vault/setup"
+      - name: postgres
+        image: postgres:latest
+        env:
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-passwd
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-user
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: pg-secret
+              key: pg-dbname
+        command:
+        - "sh"
+        - "/postgres/setup/postgres-setup.sh"
+        volumeMounts:
+        - name: postgres-setup
+          readOnly: yes
+          mountPath: "/postgres/setup"
+      volumes:
+      - configMap:
+          name: vault-db-setup
+        name: vault-setup
+      - configMap:
+          name: db-setup
+        name: postgres-setup
+      restartPolicy: Never
