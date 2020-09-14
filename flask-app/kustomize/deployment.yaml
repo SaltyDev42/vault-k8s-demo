@@ -31,7 +31,7 @@ spec:
           {{- end }}
     spec:
       containers:
-      - image: registry.gitlab.com/saltydev42/docker-images/flask-app:latest
+      - image: flask-app
         imagePullPolicy: Always
         name: flask-app
         resources: {}

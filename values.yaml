@@ -9,7 +9,7 @@ global:
   # imagePullSecrets:
   #   - name: image-pull-secret
   # TLS for end-to-end encrypted transport
-  tlsDisable: false
+  tlsDisable: true
   # Beta Feature: If deploying to OpenShift
   openshift: true
   # Create PodSecurityPolicy for pods

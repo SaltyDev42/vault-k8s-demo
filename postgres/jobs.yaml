@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: vault-setup
+  name: vault-setup-db
 spec:
   completion: 1
   template:

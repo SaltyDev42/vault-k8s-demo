@@ -21,8 +21,8 @@ vault write database/roles/flask-app \
       db_name="flask-db" \
       creation_statements=@/vault/setup/statement.sql \
       revocation_statements=@/vault/setup/revocation.sql \
-      default_ttl="1h" \
-      max_ttl="8h"
+      default_ttl="30s" \
+      max_ttl="5m"
 
 ## ROTATE ROOT ##
 sleep 5s
